@@ -1,0 +1,6 @@
+C:\Users\Benja\source\repos\creador-tienda-online\Domain\bin\Debug\Domain.dll
+C:\Users\Benja\source\repos\creador-tienda-online\Domain\bin\Debug\Domain.pdb
+C:\Users\Benja\source\repos\creador-tienda-online\Domain\obj\Debug\Domain.csproj.AssemblyReference.cache
+C:\Users\Benja\source\repos\creador-tienda-online\Domain\obj\Debug\Domain.csproj.CoreCompileInputs.cache
+C:\Users\Benja\source\repos\creador-tienda-online\Domain\obj\Debug\Domain.dll
+C:\Users\Benja\source\repos\creador-tienda-online\Domain\obj\Debug\Domain.pdb

@@ -1,0 +1,12 @@
+C:\Users\Benja\source\repos\creador-tienda-online\Pruebas\bin\Debug\Pruebas.exe.config
+C:\Users\Benja\source\repos\creador-tienda-online\Pruebas\bin\Debug\Pruebas.exe
+C:\Users\Benja\source\repos\creador-tienda-online\Pruebas\bin\Debug\Pruebas.pdb
+C:\Users\Benja\source\repos\creador-tienda-online\Pruebas\bin\Debug\Business.dll
+C:\Users\Benja\source\repos\creador-tienda-online\Pruebas\bin\Debug\Domain.dll
+C:\Users\Benja\source\repos\creador-tienda-online\Pruebas\bin\Debug\Business.pdb
+C:\Users\Benja\source\repos\creador-tienda-online\Pruebas\bin\Debug\Domain.pdb
+C:\Users\Benja\source\repos\creador-tienda-online\Pruebas\obj\Debug\Pruebas.csproj.AssemblyReference.cache
+C:\Users\Benja\source\repos\creador-tienda-online\Pruebas\obj\Debug\Pruebas.csproj.CoreCompileInputs.cache
+C:\Users\Benja\source\repos\creador-tienda-online\Pruebas\obj\Debug\Pruebas.csproj.Up2Date
+C:\Users\Benja\source\repos\creador-tienda-online\Pruebas\obj\Debug\Pruebas.exe
+C:\Users\Benja\source\repos\creador-tienda-online\Pruebas\obj\Debug\Pruebas.pdb
