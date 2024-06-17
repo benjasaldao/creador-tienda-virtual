@@ -73,6 +73,13 @@ namespace Business
             finally { data.closeConnection(); }
         }
 
+        /// <summary>
+        /// Deletes an user from the database
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>TRUE if correctly deleted,
+        /// throws an exception if not
+        /// </returns>
         public bool delete(User user)
         {
             try
@@ -90,6 +97,41 @@ namespace Business
             {
                 data.closeConnection();
             }
+        }
+
+        /// <summary>
+        /// Log in an user with his email and password 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>TRUE if password and email are correct</returns>
+        public bool login(User user)
+        {
+            try
+            {
+                data.setProcedure("spUserLogin");
+                data.setParam("@email", user.email);
+                data.setParam("@password", user.password);
+                data.executeAction();
+
+                if (data.Reader.Read())
+                {
+                    user.id = (int)data.Reader["id"];
+                    if (!(data.Reader["name"] is DBNull))
+                        user.name = (string)data.Reader["name"];
+                    if (!(data.Reader["surname"] is DBNull))
+                        user.surname = (string)data.Reader["surname"];
+
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            } finally { 
+                data.closeConnection(); 
+            }
+
         }
     }
 }
