@@ -7,7 +7,17 @@ using System.Threading.Tasks;
 namespace Domain
 {
     public class Category
-    {
+    { 
+        /// <summary>
+        /// Constructor created to be used within the product object
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="description"></param>
+        public Category(int _id, string _description) 
+        {
+            id = _id;
+            description = _description;
+        }
         public int id {  get; set; }
         public string description { get; set; }
         public string imageUrl { get; set; }
