@@ -8,6 +8,8 @@ namespace Domain
 {
     public class Category
     { 
+
+        public Category() { }
         /// <summary>
         /// Constructor created to be used within the product object
         /// </summary>

@@ -22,17 +22,16 @@ namespace Business
         /// </summary>
         /// <param name="filter"></param>
         /// <returns>Returns a list with category objects or an empty list if it doesnt found any register</returns>
-        public List<Category> list(string filter = "")
+        public List<Category> list(int storeId)
         {
             try
             {
                 List<Category> list = new List<Category>();
 
                 data.setProcedure("spListCategories");
-                if (filter != "")
-                {
-                    data.setParam("@query", filter);
-                }
+
+                data.setParam("@storeId", storeId);
+
                 data.executeAction();
 
                 while (data.Reader.Read())
@@ -134,14 +133,14 @@ namespace Business
         /// <param name="category"></param>
         /// <param name="store"></param>
         /// <returns>TRUE if it was created successfully</returns>
-        public bool create(Category category, Store store)
+        public bool create(Category category, int storeId)
         {
             try
             {
                 data.setProcedure("spCreateCategory");
                 data.setParam("@description", category.description);
                 data.setParam("@imageUrl", category.imageUrl);
-                data.setParam("@storeId", store.id);
+                data.setParam("@storeId", storeId);
 
                 data.executeAction();
                 return true;
