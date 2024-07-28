@@ -12,6 +12,7 @@ namespace Domain
         public string name { get; set; }
         public string description { get; set; }
         public int userId { get; set; }
+        public string logoUrl { get; set; }
         public bool state {  get; set; }
     }
 }

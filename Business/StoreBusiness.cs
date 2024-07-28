@@ -1,9 +1,7 @@
 ﻿using Domain;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Business
 {
@@ -25,10 +23,11 @@ namespace Business
         {
             try
             {
-                data.setProcedure("spCreateStore");
-                data.setParam("@name", store.name);
-                data.setParam("@description", store.description);
-                data.setParam("@userId", user.id);
+                data.setQuery("INSERT INTO Stores (Name, Description, LogoUrl, UserId) VALUES (@Name, @Description, @LogoUrl, @UserId)");
+                data.setParam("@Name", store.name);
+                data.setParam("@Description", store.description);
+                data.setParam("@UserId", user.id);
+                data.setParam("@LogoUrl", store.logoUrl);
                 data.executeAction();
 
                 return true;
@@ -37,35 +36,6 @@ namespace Business
             {
                 throw ex;
             } finally
-            {
-                data.closeConnection();
-            }
-        }
-
-
-        /// <summary>
-        /// Creates a new store register in the database
-        /// </summary>
-        /// <param name="store"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public bool create(Store store, int id)
-        {
-            try
-            {
-                data.setProcedure("spCreateStore");
-                data.setParam("@name", store.name);
-                data.setParam("@description", store.description);
-                data.setParam("@userId", id);
-                data.executeAction();
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
             {
                 data.closeConnection();
             }
@@ -82,21 +52,23 @@ namespace Business
             {
                 List<Store> list = new List<Store>();
 
-                data.setProcedure("spListStoresByUser");
-                data.setParam("@userId", userId);
-                data.executeAction();
+                data.setQuery("SELECT Id, Description, Name, UserId, State FROM Stores WHERE UserId = @UserId");
+                data.setParam("@UserId", userId);
+                data.executeRead();
 
                 while (data.Reader.Read())
                 {
                     Store store = new Store();
 
-                    store.id = (int)data.Reader["id"];
-                    if (!(data.Reader["description"] is DBNull))
-                        store.description = (String)data.Reader["description"];
-                    if (!(data.Reader["name"] is DBNull))
-                        store.name = (String)data.Reader["name"];
-                    store.userId = (int)data.Reader["userId"];
-                    store.state = (bool)data.Reader["state"];
+                    store.id = (int)data.Reader["Id"];
+                    if (!(data.Reader["Description"] is DBNull))
+                        store.description = (String)data.Reader["Description"];
+                    if (!(data.Reader["Name"] is DBNull))
+                        store.name = (String)data.Reader["Name"];
+                    if (!(data.Reader["LogoUrl"] is DBNull))
+                        store.logoUrl = (String)data.Reader["LogoUrl"];
+                    store.userId = (int)data.Reader["UserId"];
+                    store.state = (bool)data.Reader["State"];
 
                     list.Add(store);
                 }
@@ -118,10 +90,11 @@ namespace Business
         {
             try
             {
-                data.setProcedure("spUpdateStore");
-                data.setParam("@name", store.name);
-                data.setParam("@description", store.description);
-                data.setParam("@id", store.id);
+                data.setQuery("UPDATE Stores SET Name = @Name, Description = @Description, LogoUrl = @LogoUrl WHERE Id = @StoreId");
+                data.setParam("@Name", store.name);
+                data.setParam("@LogoUrl", store.logoUrl);
+                data.setParam("@Description", store.description);
+                data.setParam("@StoreId", store.id);
               
                 data.executeAction();
                 return true;
@@ -143,8 +116,8 @@ namespace Business
         {
             try
             {
-                data.setProcedure("spDeleteStore");
-                data.setParam("@id", store.id);
+                data.setQuery("DELETE Stores WHERE Id = @Id");
+                data.setParam("@Id", store.id);
                 data.executeAction();
 
                 return true;

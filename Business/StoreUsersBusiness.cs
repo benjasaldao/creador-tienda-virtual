@@ -1,9 +1,5 @@
 ﻿using Domain;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business
 {
@@ -24,14 +20,14 @@ namespace Business
         {
             try
             {
-                data.setProcedure("spCreateStoreUser");
-                data.setParam("@email", user.email);
-                data.setParam("@pass", user.password);
-                data.setParam("@name", user.name);
-                data.setParam("@surname", user.surname);
-                data.setParam("@adress", user.adress);
-                data.setParam("@city", user.city);
-                data.setParam("@storeId", user.storeId);
+                data.setQuery("INSERT INTO StoreUsers (Email, Pass, Name, Surname, StoreId) VALUES (@StoreUser, @Pass, @Name, @Surname, @StoreId)");
+                data.setParam("@Email", user.email);
+                data.setParam("@Pass", user.password);
+                data.setParam("@Name", user.name);
+                data.setParam("@Surname", user.surname);
+                data.setParam("@Adress", user.adress);
+                data.setParam("@City", user.city);
+                data.setParam("@StoreId", user.storeId);
 
                 data.executeAction();
                 return true;
@@ -59,7 +55,7 @@ namespace Business
         {
             try
             {
-                data.setProcedure("spUpdateStoreUser");
+                data.setQuery("UPDATE StoreUsers SET Email = @Email, Name = @Name, Surname = @Surname, Adress = @Adress, City =  @City WHERE Id = @Id");
                 data.setParam("@email", user.email);
                 data.setParam("@name", user.name);
                 data.setParam("@surname", user.surname);
@@ -88,8 +84,8 @@ namespace Business
         {
             try
             {
-                data.setProcedure("spDeleteStoreUser");
-                data.setParam("@id", user.id);
+                data.setQuery("DELETE StoreUsers WHERE Id = @Id");
+                data.setParam("@Id", user.id);
                 data.executeAction();
                 return true;
             }
@@ -112,18 +108,18 @@ namespace Business
         {
             try
             {
-                data.setProcedure("spStoreUserLogin");
-                data.setParam("@email", user.email);
-                data.setParam("@password", user.password);
+                data.setQuery("SELECT Id, Email, User FROM StoreUsers WHERE Email = @Email AND Pass = @Pass");
+                data.setParam("@Email", user.email);
+                data.setParam("@Pass", user.password);
                 data.executeAction();
 
                 if (data.Reader.Read())
                 {
-                    user.id = (int)data.Reader["id"];
-                    if (!(data.Reader["name"] is DBNull))
-                        user.name = (string)data.Reader["name"];
-                    if (!(data.Reader["surname"] is DBNull))
-                        user.surname = (string)data.Reader["surname"];
+                    user.id = (int)data.Reader["Id"];
+                    if (!(data.Reader["Name"] is DBNull))
+                        user.name = (string)data.Reader["Name"];
+                    if (!(data.Reader["Surname"] is DBNull))
+                        user.surname = (string)data.Reader["Surname"];
 
                     return true;
                 }

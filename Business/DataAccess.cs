@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business
 {
@@ -23,7 +18,7 @@ namespace Business
             
             // connection = new SqlConnection(ConfigurationManager.AppSettings["cadenaConexion"]);
             
-            connection = new SqlConnection("server=.\\SQLEXPRESS; database=CREADOR_TIENDA_VIRTUAL; integrated security=true");
+            connection = new SqlConnection("server=.\\SQLEXPRESS; database=Gestor_Catalogos_DB; integrated security=true");
             
             command = new SqlCommand();
         }

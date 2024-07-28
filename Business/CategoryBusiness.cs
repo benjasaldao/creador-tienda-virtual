@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Domain;
 
 namespace Business
@@ -28,21 +25,21 @@ namespace Business
             {
                 List<Category> list = new List<Category>();
 
-                data.setProcedure("spListCategories");
+                data.setQuery("SELECT Id, Description, ImageUrl, State, StoreId FROM Categories WHERE StoreId = @StoreId");
 
-                data.setParam("@storeId", storeId);
+                data.setParam("@StoreId", storeId);
 
-                data.executeAction();
+                data.executeRead();
 
                 while (data.Reader.Read())
                 {
                     Category category = new Category();
 
-                    category.id = (int)data.Reader["id"];
-                    category.description = (string)data.Reader["description"];
-                    category.imageUrl = (string)data.Reader["imageUrl"];
-                    category.state = (bool)data.Reader["state"];
-                    category.storeId = (int)data.Reader["storeId"];
+                    category.id = (int)data.Reader["Id"];
+                    category.description = (string)data.Reader["Description"];
+                    category.imageUrl = (string)data.Reader["ImageUrl"];
+                    category.state = (bool)data.Reader["State"];
+                    category.storeId = (int)data.Reader["StoreId"];
 
                     list.Add(category);
                 }
@@ -62,7 +59,7 @@ namespace Business
         }
 
         /// <summary>
-        /// Get only one category register wih the id number given
+        /// Search for one register in the DB
         /// </summary>
         /// <param name="id"></param>
         /// <returns>
@@ -73,17 +70,17 @@ namespace Business
             try
             {
                 Category category = new Category();
-                data.setProcedure("spGetOneCategory");
-                data.setParam("@id", id);
-                data.executeAction();
+                data.setQuery("SELECT Id, Description, ImageUrl, State, StoreId FROM Categories WHERE Id = @Id");
+                data.setParam("@Id", id);
+                data.executeRead();
 
                 if (data.Reader.Read())
                 {
-                    category.id = (int)data.Reader["id"];
-                    category.description = (string)data.Reader["description"];
-                    category.imageUrl = (string)data.Reader["imageUrl"];
-                    category.state = (bool)data.Reader["state"];
-                    category.storeId = (int)data.Reader["storeId"];
+                    category.id = (int)data.Reader["Id"];
+                    category.description = (string)data.Reader["Description"];
+                    category.imageUrl = (string)data.Reader["ImageUrl"];
+                    category.state = (bool)data.Reader["State"];
+                    category.storeId = (int)data.Reader["StoreId"];
                 }
 
                 return category;
@@ -107,10 +104,10 @@ namespace Business
         {
             try
             {
-                data.setProcedure("spUpdateCategory");
-                data.setParam("@id", category.id);
-                data.setParam("@description", category.description);
-                data.setParam("@imageUrl", category.imageUrl);
+                data.setQuery("UPDATE Categories SET Description = @Description, ImageUrl = @ImageUrl WHERE Id = @Id");
+                data.setParam("@Id", category.id);
+                data.setParam("@Description", category.description);
+                data.setParam("@ImageUrl", category.imageUrl);
 
                 data.executeAction();
 
@@ -131,16 +128,15 @@ namespace Business
         /// with the given store id
         /// </summary>
         /// <param name="category"></param>
-        /// <param name="store"></param>
         /// <returns>TRUE if it was created successfully</returns>
-        public bool create(Category category, int storeId)
+        public bool create(Category category)
         {
             try
             {
-                data.setProcedure("spCreateCategory");
-                data.setParam("@description", category.description);
-                data.setParam("@imageUrl", category.imageUrl);
-                data.setParam("@storeId", storeId);
+                data.setQuery("INSERT INTO Categories (Description, ImageUrl, StoreId) VALUES (@Description, @ImageUrl, @StoreId)");
+                data.setParam("@Description", category.description);
+                data.setParam("@ImageUrl", category.imageUrl);
+                data.setParam("@StoreId", category.storeId);
 
                 data.executeAction();
                 return true;
@@ -163,8 +159,8 @@ namespace Business
         {
             try
             {
-                data.setProcedure("spDeleteCategory");
-                data.setParam("@id", category.id);
+                data.setQuery("DELETE Categories WHERE Id = @Id");
+                data.setParam("@Id", category.id);
                 data.executeAction();
 
                 return true;

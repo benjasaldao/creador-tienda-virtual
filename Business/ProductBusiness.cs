@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Domain;
 
 namespace Business
@@ -25,15 +21,14 @@ namespace Business
         {
             try
             {
-                data.setProcedure("spCreateProduct");
-                data.setParam("@code", product.code);
-                data.setParam("@name", product.name);
-                data.setParam("@description", product.description);
-                data.setParam("@idCategory", product.category.id);
-                data.setParam("@price", product.price);
-                data.setParam("@unit", product.storeId);
-                data.setParam("@stock", product.stock);
-                data.setParam("@storeId", product.storeId);
+                data.setQuery("INSERT INTO Products (Code, Name, Description, CategoryId, Price, Stock, StoreId) VALUES (@Code, @Name, @Description, @CategoryId, @Price, @Stock, @StoreId)");
+                data.setParam("@Code", product.code);
+                data.setParam("@Name", product.name);
+                data.setParam("@Description", product.description);
+                data.setParam("@IdCategory", product.category.id);
+                data.setParam("@Price", product.price);
+                data.setParam("@Stock", product.stock);
+                data.setParam("@StoreId", product.storeId);
 
                 data.executeAction();
                 return true;
@@ -58,26 +53,26 @@ namespace Business
             List<Product> list = new List<Product>();
             try
             {
-                data.setProcedure("spListProducts");
-                data.setParam("@storeId", storeId);
+                data.setQuery("SELECT Id, Code, Name, Description, Price, Unit, StoreId, Stock, State FROM Products WHERE StoreId = @StoreId");
+                data.setParam("@StoreId", storeId);
 
-                data.executeAction();
+                data.executeRead();
 
                 while (data.Reader.Read())
                 {
                     Product product = new Product();
 
-                    product.id = (int)data.Reader["id"];
-                    product.code = (string)data.Reader["code"];
-                    product.name = (string)data.Reader["name"];
-                    product.description = (string)data.Reader["description"];
-                    product.price = (int)data.Reader["price"];
-                    product.unit = (string)data.Reader["unit"];
-                    product.storeId = (int)data.Reader["storeId"];
-                    product.stock = (int)data.Reader["stock"];
-                    product.state = (bool)data.Reader["state"];
+                    product.id = (int)data.Reader["Id"];
+                    product.code = (string)data.Reader["Code"];
+                    product.name = (string)data.Reader["Name"];
+                    product.description = (string)data.Reader["Description"];
+                    product.price = (int)data.Reader["Price"];
+                    product.unit = (string)data.Reader["Unit"];
+                    product.storeId = (int)data.Reader["StoreId"];
+                    product.stock = (int)data.Reader["Stock"];
+                    product.state = (bool)data.Reader["State"];
 
-                    product.category = new Category((int)data.Reader["idCategorie"], (string)data.Reader["category"]);
+                    product.category = new Category((int)data.Reader["CategoryId"], (string)data.Reader["category"]);
 
                     list.Add(product);
                 }
@@ -98,29 +93,28 @@ namespace Business
         /// <param name="productId"></param>
         /// <param name="storeId"></param>
         /// <returns>A product or an empty product if it doesnt find any with the given id</returns>
-        public Product getOne(int productId, int storeId)
+        public Product getOne(int productId)
         {
             try
             {
                 Product product = new Product();
-                data.setProcedure("spGetOneProduct");
-                data.setParam("@id", productId);
-                data.setParam("@storeId", storeId);
-                data.executeAction();
+                data.setQuery("SELECT Id, Code, Name, Description, Price, Unit, StoreId, Stock, State FROM Products WHERE Id = @Id");
+                data.setParam("@Id", productId);
+                data.executeRead();
 
                 if(data.Reader.Read())
                 {
-                    product.id = (int)data.Reader["id"];
-                    product.code = (string)data.Reader["code"];
-                    product.name = (string)data.Reader["name"];
-                    product.description = (string)data.Reader["description"];
-                    product.price = (int)data.Reader["price"];
-                    product.unit = (string)data.Reader["unit"];
-                    product.storeId = (int)data.Reader["storeId"];
-                    product.stock = (int)data.Reader["stock"];
-                    product.state = (bool)data.Reader["state"];
+                    product.id = (int)data.Reader["Id"];
+                    product.code = (string)data.Reader["Code"];
+                    product.name = (string)data.Reader["Name"];
+                    product.description = (string)data.Reader["Description"];
+                    product.price = (int)data.Reader["Price"];
+                    product.unit = (string)data.Reader["Unit"];
+                    product.storeId = (int)data.Reader["StoreId"];
+                    product.stock = (int)data.Reader["Stock"];
+                    product.state = (bool)data.Reader["State"];
 
-                    product.category = new Category((int)data.Reader["idCategorie"], (string)data.Reader["category"]);
+                    product.category = new Category((int)data.Reader["CategoryId"], (string)data.Reader["category"]);
                 }
 
                 return product;
@@ -143,15 +137,14 @@ namespace Business
         public bool update(Product product) {
             try
             {
-                data.setProcedure("spUpdateProduct");
-                data.setParam("@id", product.id);
-                data.setParam("@code", product.code);
-                data.setParam("@name", product.name);
-                data.setParam("@description", product.description);
-                data.setParam("@idCategory", product.category.id);
-                data.setParam("@price", product.price);
-                data.setParam("@unit", product.storeId);
-                data.setParam("@stock", product.stock);
+                data.setQuery("UPDATE Products SET Code = @Code, Name = @Name, Description = @Description, CategoryId = @CategoryId, Price = @Price, Stock = @Stock WHERE Id = @Id");
+                data.setParam("@Id", product.id);
+                data.setParam("@Code", product.code);
+                data.setParam("@Name", product.name);
+                data.setParam("@Description", product.description);
+                data.setParam("@CategoryId", product.category.id);
+                data.setParam("@Price", product.price);
+                data.setParam("@Stock", product.stock);
 
                 data.executeAction();
 
@@ -173,8 +166,8 @@ namespace Business
         {
             try
             {
-                data.setProcedure("spDeleteProduct");
-                data.setParam("@id", id);
+                data.setQuery("DELETE Products WHERE Id = @Id");
+                data.setParam("@Id", id);
 
                 data.executeAction();
                 return true;
@@ -186,7 +179,7 @@ namespace Business
             finally { data.closeConnection(); }
         }
 
-        // Favorites
+        // FAVORITES
 
         /// <summary>
         /// Gets all the products saved as favorites by a storeUser
@@ -197,7 +190,7 @@ namespace Business
             List<Product> favorites = new List<Product>();
             try
             {
-                data.setProcedure("spListFavorites");
+                data.setQuery("SELECT P.Id, Code, P.Name, Description, Price, P.StoreId, Stock, P.State FROM Products P INNER JOIN Favorites F ON P.Id = F.ProductId INNER JOIN StoreUsers SU ON F.StoreUserId = SU.Id");
                 data.setParam("@storeUserId", storeUserId);
                 data.executeRead();
 
@@ -205,17 +198,17 @@ namespace Business
                 {
                     Product product = new Product();
 
-                    product.id = (int)data.Reader["id"];
-                    product.code = (string)data.Reader["code"];
-                    product.name = (string)data.Reader["name"];
-                    product.description = (string)data.Reader["description"];
-                    product.price = (int)data.Reader["price"];
-                    product.unit = (string)data.Reader["unit"];
-                    product.storeId = (int)data.Reader["storeId"];
-                    product.stock = (int)data.Reader["stock"];
-                    product.state = (bool)data.Reader["state"];
+                    product.id = (int)data.Reader["Id"];
+                    product.code = (string)data.Reader["Code"];
+                    product.name = (string)data.Reader["Name"];
+                    product.description = (string)data.Reader["Description"];
+                    product.price = (int)data.Reader["Price"];
+                    product.unit = (string)data.Reader["Unit"];
+                    product.storeId = (int)data.Reader["StoreId"];
+                    product.stock = (int)data.Reader["Stock"];
+                    product.state = (bool)data.Reader["State"];
 
-                    product.category = new Category((int)data.Reader["idCategorie"], (string)data.Reader["category"]);
+                    product.category = new Category((int)data.Reader["CategoryId"], (string)data.Reader["category"]);
 
                     favorites.Add(product);
                 }
@@ -240,10 +233,10 @@ namespace Business
         {
             try
             {
-                data.setProcedure("spCreateFavorite");
-                data.setParam("@productId", productId);
-                data.setParam("@storeUserId", user.id);
-                data.setParam("@storeId", user.storeId);
+                data.setQuery("INSERT INTO Favorites (ProductId, StoreUserId, StoreId) VALUES (@ProductId, @StoreUserId, @StoreId)");
+                data.setParam("@ProductId", productId);
+                data.setParam("@StoreUserId", user.id);
+                data.setParam("@StoreId", user.storeId);
 
                 data.executeAction();
                 return true;
@@ -268,9 +261,9 @@ namespace Business
         {
             try
             {
-                data.setQuery("spDeleteFavorite");
-                data.setParam("@storeUserId", userId);
-                data.setParam("@productId", productId);
+                data.setQuery("DELETE Favorites WHERE StoreUserId = @StoreUserId AND ProductId = @ProductId");
+                data.setParam("@StoreUserId", userId);
+                data.setParam("@ProductId", productId);
 
                 data.executeAction();
                 return true;
@@ -282,13 +275,19 @@ namespace Business
             finally { data.closeConnection(); }
         }
 
+        /// <summary>
+        /// Checks in the DB if a product is a favorite from a user
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="userId"></param>
+        /// <returns>TRUE if a register is founded</returns>
         public bool isFavorite(int productId, int userId)
         {
             try
             {
-                data.setQuery("select storeUserId, productId from FAVORITES where storeUserId = @storeUserId and productId = @productId");
-                data.setParam("@storeUserId", userId);
-                data.setParam("@productId", productId);
+                data.setQuery("SELECT StoreUserId, ProductId FROM Favorites WHERE StoreUserId = @StoreUserId AND ProductId = @ProductId");
+                data.setParam("@StoreUserId", userId);
+                data.setParam("@ProductId", productId);
 
                 data.executeRead();
 
@@ -308,5 +307,57 @@ namespace Business
             finally { data.closeConnection(); }
         }
 
+        // IMAGES
+
+        /// <summary>
+        /// Add an image to a product
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="imageUrl"></param>
+        /// <returns>true if it was added successfully</returns>
+        public bool addImage(int productId, string imageUrl)
+        {
+            try
+            {
+                data.setQuery("INSERT INTO ProductsImages (ProductId, ImageUrl) VALUES (@ProductId, @ImageUrl)");
+                data.setParam("@ProductId", productId);
+                data.setParam("@ImageUrl", imageUrl);
+
+                data.executeAction();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally { data.closeConnection(); }
+        }
+
+        /// <summary>
+        /// Deletes an image of a given product
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="imageUrl"></param>
+        /// <returns>true if it was deleted successfully</returns>
+        public bool deleteImage(int productId, string imageUrl)
+        {
+            try
+            {
+                data.setQuery("DELETE ProductsImages WHERE ProductId = @ProductId AND ImageUrl LIKE @ImageUrl");
+                data.setParam("@ProductId", productId);
+                data.setParam("@ImageUrl", imageUrl);
+
+                data.executeAction();
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally { data.closeConnection(); }
+        }
     }
 }

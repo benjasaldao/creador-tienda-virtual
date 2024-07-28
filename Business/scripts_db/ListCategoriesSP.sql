@@ -18,14 +18,11 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE spCreateUser 
-	@email varchar(100),
-	@pass varchar(20),
-	@name varchar(50),
-	@surname varchar(50)
+CREATE PROCEDURE spListCategories
+	@StoreId int
 AS
 BEGIN
-	INSERT INTO USERS (email, pass, name, surname) 
-	VALUES ( @email, @pass, @name, @surname)
+	SELECT Id, Description, ImageUrl, State, StoreId 
+	from Categories WHERE StoreId = @StoreId
 END
 GO
